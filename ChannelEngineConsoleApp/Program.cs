@@ -23,7 +23,7 @@ namespace ChannelEngineConsoleApp
 
             var orderAppService = provider.GetRequiredService<IOrderAppService>();
 
-            return await orderAppService.GetOrders();
+            return await orderAppService.GetTopFiveOrders();
         }
 
         private static IHostBuilder CreateHostBuilder(string[] args)
