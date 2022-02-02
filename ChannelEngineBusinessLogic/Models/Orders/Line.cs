@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace ChannelEngineBusinessLogic.Models.Orders
 {
-    public class Line
+    public class Linea
     {
         public string GTIN { get; set; }
         public int Quantity { get; set; }

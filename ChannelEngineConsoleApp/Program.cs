@@ -10,35 +10,27 @@ namespace ChannelEngineConsoleApp
 {
     class Program
     {
-        static Task Main(string[] args)
+        static async Task Main(string[] args)
         {
             using var host = CreateHostBuilder(args).Build();
-            var orders = GreetWithDependencyInjection(host.Services);
-
-            foreach(var order in orders)
-            {
-                foreach(var line in order.Lines)
-                {
-                }
-            }
-            return host.RunAsync();
+            var orders = await OrdersWithDependencyInjection(host.Services);
         }
 
-        public static List<Order> GreetWithDependencyInjection(IServiceProvider services)
+        public static async Task<Order> OrdersWithDependencyInjection(IServiceProvider services)
         {
             using var serviceScope = services.CreateScope();
             var provider = serviceScope.ServiceProvider;
 
-            var greeter = provider.GetRequiredService<IOrderAppService>();
+            var orderAppService = provider.GetRequiredService<IOrderAppService>();
 
-            return greeter.GetOrders();
+            return await orderAppService.GetOrders();
         }
 
         private static IHostBuilder CreateHostBuilder(string[] args)
         {
             return Host.CreateDefaultBuilder(args)
                 .ConfigureServices((_, services) =>
-                    services.AddTransient<IOrderAppService, OrderAppService>());
+                services.AddHttpClient<IOrderAppService, OrderAppService>());
         }
     }
 }
