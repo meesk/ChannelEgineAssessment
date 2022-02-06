@@ -12,13 +12,11 @@ namespace ChannelEngineBusinessLogic.Services.Orders
     public class OrderAppService : IOrderAppService
     {
         private readonly HttpClient _client;
-        private readonly IProductAppService _productAppService;
         private const string API_KEY = "541b989ef78ccb1bad630ea5b85c6ebff9ca3322";
         private const string BASE_URL = "https://api-dev.channelengine.net/api/v2/";
-        public OrderAppService(HttpClient client, IProductAppService productAppService)
+        public OrderAppService(HttpClient client)
         {
             _client = client ?? throw new ArgumentNullException(nameof(client));
-            _productAppService = productAppService;
         }
 
         private async Task<Order> GetOrdersInProgress()
