@@ -8,6 +8,6 @@ namespace ChannelEngineBusinessLogic.Services.Orders
 {
     public interface IOrderAppService
     {
-        public Task<Order> GetTopFiveOrders();
+        public Task<IEnumerable<Line>> GetTopFiveOrders();
     }
 }

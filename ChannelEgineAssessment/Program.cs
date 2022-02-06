@@ -1,5 +1,8 @@
+using ChannelEngineBusinessLogic.Services.Orders;
+using ChannelEngineBusinessLogic.Services.Products;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
@@ -21,6 +24,10 @@ namespace ChannelEgineAssessment
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                }).ConfigureServices((_, services) =>
+                {
+                    services.AddHttpClient<IOrderAppService, OrderAppService>();
+                    services.AddHttpClient<IProductAppService, ProductAppService>();
                 });
     }
 }

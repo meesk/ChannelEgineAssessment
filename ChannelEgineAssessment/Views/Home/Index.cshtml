@@ -1,8 +1,36 @@
-﻿@{
+﻿@model IEnumerable<ChannelEngineBusinessLogic.Models.Line>
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Products in progress</h1>
+    <table class="table table-striped">
+        <thead class="thead-light">
+            <tr>
+                <th scope="col">ProductNo</th>
+                <th scope="col">GTIN</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Update stock to 25</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var line in Model)
+            {
+                <tr>
+                    <td>@line.MerchantProductNo</td>
+                    <td>@line.Gtin</td>
+                    <td>@line.Quantity</td>
+                    <td>
+                        @using (Html.BeginForm("SetStockToTwentyFive", "Home", FormMethod.Post))
+                        {
+                        <input type="hidden" name="merchantProductNo" value="@line.MerchantProductNo" />
+                        <input type="submit" class="btn btn-default" value="Submit" />
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>

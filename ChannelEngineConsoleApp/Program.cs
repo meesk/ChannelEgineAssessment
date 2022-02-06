@@ -1,5 +1,6 @@
 ﻿using ChannelEngineBusinessLogic.Models;
-using ChannelEngineBusinessLogic.Services;
+using ChannelEngineBusinessLogic.Services.Orders;
+using ChannelEngineBusinessLogic.Services.Products;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
@@ -14,9 +15,15 @@ namespace ChannelEngineConsoleApp
         {
             using var host = CreateHostBuilder(args).Build();
             var orders = await OrdersWithDependencyInjection(host.Services);
+            foreach(var product in orders)
+            {
+                Console.WriteLine("ProductNo: " + product.MerchantProductNo);
+                Console.WriteLine("GTIN: " + product.Gtin);
+                Console.WriteLine("Quantity: " + product.Quantity);
+            }
         }
 
-        public static async Task<Order> OrdersWithDependencyInjection(IServiceProvider services)
+        public static async Task<IEnumerable<Line>> OrdersWithDependencyInjection(IServiceProvider services)
         {
             using var serviceScope = services.CreateScope();
             var provider = serviceScope.ServiceProvider;
@@ -30,7 +37,10 @@ namespace ChannelEngineConsoleApp
         {
             return Host.CreateDefaultBuilder(args)
                 .ConfigureServices((_, services) =>
-                services.AddHttpClient<IOrderAppService, OrderAppService>());
+                {
+                    services.AddHttpClient<IOrderAppService, OrderAppService>();
+                    services.AddHttpClient<IProductAppService, ProductAppService>();
+                });
         }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using ChannelEgineAssessment.Models;
+using ChannelEngineBusinessLogic.Services.Orders;
+using ChannelEngineBusinessLogic.Services.Products;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -12,15 +14,30 @@ namespace ChannelEgineAssessment.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IOrderAppService _orderAppService;
+        private readonly IProductAppService _productAppService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IOrderAppService orderAppService, IProductAppService productAppService)
         {
             _logger = logger;
+            _orderAppService = orderAppService;
+            _productAppService = productAppService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var orders = await _orderAppService.GetTopFiveOrders();
+            return View(orders);
+        }
+
+        public async Task<ActionResult> SetStockToTwentyFive(string merchantProductNo)
+        {
+            var success = await _productAppService.UpdateProductStock(merchantProductNo, 25);
+            if (!success)
+            {
+                // error
+            }
+            return RedirectToAction("Index");
         }
 
         public IActionResult Privacy()

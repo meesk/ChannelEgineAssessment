@@ -7,6 +7,6 @@ namespace ChannelEngineBusinessLogic.Services.Products
 {
     public interface IProductAppService
     {
-        void GetSingleProduct();
+        public Task<bool> UpdateProductStock(string merchantProductNo, int newAmount);
     }
 }
